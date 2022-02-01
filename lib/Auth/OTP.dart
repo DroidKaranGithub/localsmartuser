@@ -34,7 +34,8 @@ class _OTPState extends State<OTP> {
   String? phone;
   String? code;
   String? msg;
-
+  bool isOtpError = false;
+  String validationMessage = "";
   late OverlayEntry? loader;
   String? EnteredOtp;
   final scaffoldKey = GlobalKey();
@@ -125,13 +126,32 @@ class _OTPState extends State<OTP> {
       var msg = jsonDecode(value.body);
       print("msg $msg");
       if (msg['status'] == false) {
-        Fluttertoast.showToast(
-          msg: msg['error'],
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              msg['error'],
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
         );
+        // Fluttertoast.showToast(
+        //   msg: msg['error'],
+
+        // );
       } else {
-        Fluttertoast.showToast(
-          msg: msg['msg'],
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              msg['msg'],
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
         );
+        // Fluttertoast.showToast(
+        //   msg: msg['msg'],
+        // );
         ApiRepository()
             .Register(
                 RegisterUserModalClass(Name: widget.Name, Mobile: widget.Mobile)
@@ -159,7 +179,16 @@ class _OTPState extends State<OTP> {
               return Ask();
             }));
           } else {
-            Fluttertoast.showToast(msg: msg['message']);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.red,
+                content: Text(
+                  msg['message'],
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            );
+            // Fluttertoast.showToast(msg: msg['message']);
           }
         });
       }
@@ -308,6 +337,7 @@ class _OTPState extends State<OTP> {
                         keyboardType: TextInputType.phone,
                         maxLength: 6,
                         IsStyle: true,
+                        error: isOtpError ? validationMessage : "",
                         fillColor: Colors.white,
                         style: Theme.of(context).textTheme.headline1!.copyWith(
                             color: color,
@@ -322,16 +352,22 @@ class _OTPState extends State<OTP> {
                       InkWell(
                         onTap: () {
                           print("verify ${widget.OtpCode.toString()}");
-                          Overlay.of(context)!.insert(loader!);
-                          if (controller.text.toString().isEmpty) {
-                            Fluttertoast.showToast(msg: "Enter OTP");
-                          } else {
-                            register(RegisterOTPModalClass(
-                                    phone: widget.Mobile, Otp: controller.text)
-                                .toJson());
-                          }
+
+                          setState(() {
+                            if (controller.text.toString().isEmpty) {
+                              isOtpError = true;
+                              validationMessage = "Please enter otp";
+                            } else {
+                              isOtpError = false;
+                              Overlay.of(context)!.insert(loader!);
+                              register(RegisterOTPModalClass(
+                                      phone: widget.Mobile,
+                                      Otp: controller.text)
+                                  .toJson());
+                              Loader.hideLoader(loader!);
+                            }
+                          });
                           // 1 regiter 2 login 3 resend
-                          Loader.hideLoader(loader!);
                         },
                         child: ColorButton(
                           RoundCorner: true,
@@ -346,6 +382,9 @@ class _OTPState extends State<OTP> {
                       InkWell(
                         onTap: () {
                           print(widget.OtpCode.toString());
+                          setState(() {
+                            isOtpError = false;
+                          });
                           resendOtp({
                             "phone": widget.Mobile,
                             "otp": widget.OtpCode.toString(),

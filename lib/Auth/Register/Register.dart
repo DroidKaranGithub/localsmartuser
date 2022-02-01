@@ -24,7 +24,9 @@ class _RegisterState extends State<Register> {
   String? Email;
   String? Mobile;
   String? Otp;
-
+  bool isNameError = false;
+  bool isContactError = false;
+  String validationMessage = "";
   late OverlayEntry loader;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final RegExp phoneRegex = new RegExp(r'^[6-9]\d{9}$');
@@ -40,8 +42,17 @@ class _RegisterState extends State<Register> {
 
       print("body data ${body.Msg} ${body.Otp}");
       if (msg['status'] == false) {
-        Fluttertoast.showToast(
-            msg: "${body.Msg.toString()}", toastLength: Toast.LENGTH_LONG);
+        // Fluttertoast.showToast(
+        //     msg: "${body.Msg.toString()}", toastLength: Toast.LENGTH_LONG);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              'error',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
         Navigator.pop(context);
       } else {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -123,6 +134,7 @@ class _RegisterState extends State<Register> {
                               }
                             },
                             keyboardType: TextInputType.text,
+                            error: isNameError ? validationMessage : "",
                             IsBorder: true,
                             hint: 'Name',
                             IsStyle: true,
@@ -200,6 +212,7 @@ class _RegisterState extends State<Register> {
                                 return 'Please Enter valid phone number';
                               }
                             },
+                            error: isContactError ? validationMessage : "",
                             keyboardType: TextInputType.phone,
                             maxLength: 10,
                             IsBorder: true,
@@ -222,18 +235,48 @@ class _RegisterState extends State<Register> {
 
                       InkWell(
                         onTap: () {
-                          if (_formKey.currentState!.validate()) {
-                            FocusScope.of(context).unfocus();
-                            Overlay.of(context)!.insert(loader);
-                            // GetOtp(RegisterUserModalClass(
-                            //   Mobile: Mobile,
-                            //   // Email: Email,
-                            //   Name: Name,
-                            // ).toJson());
-                            GetOtp(
-                                {"phone": Mobile, "type": "1", "role_id": "3"});
-                            Loader.hideLoader(loader);
-                          }
+                          // if (_formKey.currentState!.validate()) {
+                          FocusScope.of(context).unfocus();
+
+                          // GetOtp(RegisterUserModalClass(
+                          //   Mobile: Mobile,
+                          //   // Email: Email,
+                          //   Name: Name,
+                          // ).toJson());
+                          setState(() {
+                            if (Name == null) {
+                              isNameError = true;
+                              validationMessage = "Enter Name";
+                            } else if (Name!.isEmpty) {
+                              isNameError = true;
+                              validationMessage = "Enter Name";
+                            } else if (Mobile == null) {
+                              isNameError = false;
+                              isContactError = true;
+                              validationMessage = "Enter Mobile Number";
+                            } else if (Mobile!.isEmpty) {
+                              isNameError = false;
+                              isContactError = true;
+                              validationMessage = "Enter Mobile Number";
+                            } else if (!phoneRegex.hasMatch(Mobile!)) {
+                              isNameError = false;
+                              isContactError = true;
+                              validationMessage =
+                                  'Please Enter valid phone number';
+                            } else {
+                              isNameError = false;
+                              isContactError = false;
+                              Overlay.of(context)!.insert(loader);
+                              GetOtp({
+                                "phone": Mobile,
+                                "type": "1",
+                                "role_id": "3"
+                              });
+                              Loader.hideLoader(loader);
+                            }
+                          });
+
+                          // }
                           // Navigator.push(context, MaterialPageRoute(builder: (context){
                           //   return OTP();
                           // }));

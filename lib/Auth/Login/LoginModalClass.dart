@@ -1,16 +1,18 @@
 class LoginModalClass {
   String? Mobile;
   String? Msg;
+  String? error;
   bool? Status;
   int? Code;
   LoginUser? user;
-  LoginModalClass({this.Mobile});
+  LoginModalClass({this.Mobile, this.error});
 
   LoginModalClass.fromJson(Map<String, dynamic> json) {
     //print(json['code'].runtimeType);
     //print(json['user']['id'].runtimeType);
 
     Status = json['status'];
+    error = json['error'];
     Msg = json['msg'];
     Code = json['code'];
     print(Status);

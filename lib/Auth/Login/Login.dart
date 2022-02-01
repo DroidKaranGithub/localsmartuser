@@ -95,7 +95,16 @@ class _LoginState extends State<Login> {
 
 //         setState(() {});
       } else {
-        Fluttertoast.showToast(msg: body.Msg!);
+        // Fluttertoast.showToast(msg: body.Msg!);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              body.Msg.toString(),
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
       }
     });
   }
@@ -124,7 +133,16 @@ class _LoginState extends State<Login> {
           Status = body.Status;
         });
       } else {
-        Fluttertoast.showToast(msg: msg['error']);
+        // Fluttertoast.showToast(msg: msg['error']);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              'error',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
       }
       // if (tatus == body.Status) {
       //   Shared.pref.setBool("Login", true);
