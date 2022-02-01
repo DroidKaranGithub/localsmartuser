@@ -1,0 +1,30 @@
+{
+    "message": "Query Saved Successfully",
+    "data": {
+        "id": 50,
+        "role_id": "3",
+        "role": null,
+        "name": "Abc",
+        "email": "abc@gmail.com",
+        "phone": "8866615120",
+        "address": null,
+        "address2": null,
+        "city_id": null,
+        "state_id": null,
+        "drive_link": null,
+        "profile_image": null,
+        "current_location": "Udaipur",
+        "email_verified_at": null,
+        "verifiy_status": 0,
+        "otp_verified": "0",
+        "otp": "",
+        "status": 0,
+        "profile": null,
+        "wallet_balance": 0,
+        "device_token": null,
+        "created_at": null,
+        "updated_at": "2021-12-23T06:25:20.000000Z",
+        "deleted_at": null
+    },
+    "status": true
+}
