@@ -54,29 +54,35 @@ class _ProfileState extends State<Profile> {
                         Column(
                           children: [
                             Container(
-                                width: 75,
-                                height: 75,
-                                decoration: BoxDecoration(
-                                    color: orange,
-                                    borderRadius: BorderRadius.circular(40)),
-                                child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(40),
-                                    child: Icon(
-                                      Icons.person,
-                                      size: 30,
-                                      color: Colors.white,
-                                    )
-                                    // : Image.network(
-                                    //     Shared.pref
-                                    //         .getString("PROFILE_IMAGE")!,
-                                    //     fit: BoxFit.cover,
-                                    //   )),
-                                    )),
+                              width: 75,
+                              height: 75,
+                              decoration: BoxDecoration(
+                                  color: orange,
+                                  borderRadius: BorderRadius.circular(40)),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(40),
+                                child: Shared.pref.getString("PROFILE_IMAGE") ==
+                                        null
+                                    ? Icon(
+                                        Icons.person,
+                                        size: 30,
+                                        color: Colors.white,
+                                      )
+                                    : Image.network(
+                                        Shared.pref.getString("PROFILE_IMAGE")!,
+                                        fit: BoxFit.cover,
+                                      ),
+                              ),
+                            ),
                             SizedBox(
                               height: 10,
                             ),
                             Text(
-                              "User",
+                              Shared.pref.getString("NAME") == null
+                                  ? ""
+                                  : Shared.pref.getString("NAME") == "null"
+                                      ? ""
+                                      : Shared.pref.getString("NAME")!,
                               style: Theme.of(context)
                                   .textTheme
                                   .headline1!
@@ -145,7 +151,11 @@ class _ProfileState extends State<Profile> {
                             child: Padding(
                               padding: const EdgeInsets.all(15),
                               child: Text(
-                                "localSmartUser@gmail.com",
+                                Shared.pref.getString("EMAIL") == null
+                                    ? ""
+                                    : Shared.pref.getString("EMAIL") == "null"
+                                        ? ""
+                                        : Shared.pref.getString("EMAIL")!,
                                 style: Theme.of(context)
                                     .textTheme
                                     .headline1!
@@ -183,7 +193,11 @@ class _ProfileState extends State<Profile> {
                             child: Padding(
                               padding: const EdgeInsets.all(15),
                               child: Text(
-                                "8976543234",
+                                Shared.pref.getString("PHONE") == null
+                                    ? ""
+                                    : Shared.pref.getString("PHONE") == "null"
+                                        ? ""
+                                        : Shared.pref.getString("PHONE")!,
                                 style: Theme.of(context)
                                     .textTheme
                                     .headline1!

@@ -281,7 +281,7 @@ class _InquriesState extends State<Inquries> {
     return Expanded(
       child: noInquries
           ? Center(
-              child: Text("Data Not Found",
+              child: Text("No Inquiries Found",
                   style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold)))
           : ListView.builder(
               itemCount: Id.length,
@@ -310,7 +310,7 @@ class _InquriesState extends State<Inquries> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15)),
                             child: Padding(
-                              padding: const EdgeInsets.all((10)),
+                              padding: const EdgeInsets.all(10),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,

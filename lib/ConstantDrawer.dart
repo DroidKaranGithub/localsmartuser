@@ -70,7 +70,11 @@ class _drawerState extends State<drawer> {
                       //  Shared.pref.setString("UserName", body1.name.toString());
 //          Shared.pref.setString("mobileNumber", body1.phone.toString());
                       Text(
-                        Shared.pref.getString("UserName").toString(),
+                        Shared.pref.getString("NAME") == null
+                            ? ""
+                            : Shared.pref.getString("NAME") == "null"
+                                ? ""
+                                : Shared.pref.getString("NAME")!,
                         style: Theme.of(context).textTheme.headline1!.copyWith(
                             color: orange,
                             fontWeight: FontWeight.bold,

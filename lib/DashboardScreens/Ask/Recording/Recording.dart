@@ -105,7 +105,7 @@ class _RecordingState extends State<Recording> {
   }
 
   Future<void> openTheRecorder() async {
-    _mPathAAC = await _getTempPath('flutter_sound_example.aac');
+    // _mPathAAC = await _getTempPath('flutter_sound_example.aac');
     _mPathMP3 = await _getTempPath('flutter_sound_example.mp3');
 
     if (!kIsWeb) {
@@ -119,8 +119,9 @@ class _RecordingState extends State<Recording> {
   }
 
   // ----------------------  Here is the code for recording, convertFile(), and playback -------
-
+  bool isRecording = false;
   void record() async {
+    isRecording = true;
     var directory = await getApplicationDocumentsDirectory();
     _mPathAAC = directory.path +
         '/' +
@@ -141,6 +142,7 @@ class _RecordingState extends State<Recording> {
       setState(() {
         //var url = value;
         _mplaybackReady = true;
+        isRecording = false;
       });
 
       AudioList = value;
@@ -174,11 +176,11 @@ class _RecordingState extends State<Recording> {
     setState(() {});
     print(_mPathMP3);
     print(Shared.pref.getInt("userPerticulaId"));
-    Upload(Shared.pref.getInt("userPerticulaId").toString(), _mPathMP3);
+    upload(Shared.pref.getInt("userPerticulaId").toString(), _mPathMP3);
     print('helooooooooooooooooooooooooooooooo');
   }
 
-  Upload(String userid, String path) {
+  upload(String userid, String path) {
     print(path);
     print('hereeeeeee $userid');
     ApiRepository().RecordingUploader(userid, path).then((value) {
@@ -396,10 +398,40 @@ class _RecordingState extends State<Recording> {
                   // SizedBox(height: 20,),
                   GestureDetector(
                     onTap: () {
-                      // Overlay.of(context)!.insert(loader!);
-                      play3();
-                      Loader.hideLoader(loader!);
-                      setState(() {});
+                      debugPrint("PATH--> $_mPathAAC");
+
+                      if (_mPathAAC.isNotEmpty) {
+                        if (_mRecorder.isStopped) {
+                          Overlay.of(context)!.insert(loader!);
+                          Future.delayed(Duration(microseconds: 1500), () {
+                            play3();
+                            Loader.hideLoader(loader!);
+                            setState(() {});
+                          });
+                        } else {
+                          Overlay.of(context)!.insert(loader!);
+                          setState(() {
+                            timer1!.cancel();
+                            a = false;
+                            stopRecorder();
+                          });
+                          Future.delayed(Duration(microseconds: 1500), () {
+                            play3();
+                            Loader.hideLoader(loader!);
+                            setState(() {});
+                          });
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text(
+                              "Please record audio first.",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        );
+                      }
                     },
                     child: ColorButton(
                       width: MediaQuery.of(context).size.width * 0.5,

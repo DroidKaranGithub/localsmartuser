@@ -161,7 +161,7 @@ class _OTPState extends State<OTP> {
           print(value.body);
           print(value.statusCode);
           if (value.statusCode == 200) {
-            Fluttertoast.showToast(msg: msg['message']);
+            // Fluttertoast.showToast(msg: msg['message']);
             Shared.pref.setBool("Login", true);
             Shared.pref.setInt(
                 "userParticulaId", int.parse(msg['data']['id'].toString()));

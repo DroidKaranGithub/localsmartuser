@@ -18,6 +18,8 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  bool isNameError = false;
+  String validationMessage = "";
   OverlayEntry? loader;
   String? Email = '';
   String? Name = '';
@@ -50,6 +52,7 @@ class _EditProfileState extends State<EditProfile> {
 
   Future<void> _updateProfile() async {
     String mUrl = BaseUrl + "profile/update";
+    print("Update Profile USER_ID--> ${Shared.pref.getString("USER_ID")!}");
     print("Update Profile URL--> $mUrl");
     print("Update Profile NAME--> $mName");
     print("Update Profile EMAIL--> $mEmail");
@@ -59,15 +62,20 @@ class _EditProfileState extends State<EditProfile> {
       'POST',
       Uri.parse(mUrl),
     );
-    request.fields["user_id"] = Shared.pref.getString("USER_ID")!.toString();
+    request.fields["user_id"] = Shared.pref.getString("USER_ID")!;
     request.fields["name"] = mName;
-    request.fields["email"] = mEmail;
+    if (mEmail.isNotEmpty) {
+      request.fields["email"] = mEmail;
+    }
+
     if (profileImagePath != null)
       request.files.add(await http.MultipartFile.fromPath(
           "profile_image", profileImagePath!,
           contentType: http_parser.MediaType('profile_image', 'jpeg')));
 
     headers = {"Content-type": "multipart/form-data"};
+    debugPrint("REQUEST--> ${request.fields}");
+    debugPrint("REQUEST--> ${request.files}");
     request.headers.addAll(headers);
     var apiResponse = await request.send();
     print("This is response: -> ${apiResponse.statusCode}");
@@ -266,6 +274,7 @@ class _EditProfileState extends State<EditProfile> {
                             keyboardType: TextInputType.text,
                             IsBorder: true,
                             hint: 'Name',
+                            error: isNameError ? validationMessage : "",
                             IsStyle: true,
                             style: Theme.of(context)
                                 .textTheme
@@ -306,16 +315,16 @@ class _EditProfileState extends State<EditProfile> {
                             },
                             width: MediaQuery.of(context).size.width * 0.62,
                             validator: (value) {
-                              if (value == null) {
-                                return "Enter Email";
-                              } else if (value.isEmpty) {
-                                return "Enter Email";
-                              } else if (!emailRegex.hasMatch(value)) {
-                                return 'Please Enter valid Email';
-                              } else {
-                                Email = value;
-                                mEmail = value;
-                              }
+                              // if (value == null) {
+                              //   return "Enter Email";
+                              // } else if (value.isEmpty) {
+                              //   return "Enter Email";
+                              // } else if (!emailRegex.hasMatch(value)) {
+                              //   return 'Please Enter valid Email';
+                              // } else {
+                              Email = value;
+                              mEmail = value;
+                              // }
                             },
                             keyboardType: TextInputType.emailAddress,
                             IsBorder: true,
@@ -414,36 +423,21 @@ class _EditProfileState extends State<EditProfile> {
                       InkWell(
                         onTap: () {
                           if (mName.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                backgroundColor: orange,
-                                content: Text(
-                                  "Please enter name",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            );
-                          } else if (mEmail.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                backgroundColor: orange,
-                                content: Text(
-                                  "Please enter email",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            );
-                          } else if (!emailRegex.hasMatch(mEmail)) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                backgroundColor: orange,
-                                content: Text(
-                                  "Please enter valid email",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            );
+                            isNameError = true;
+                            validationMessage = "Please enter name";
+                            setState(() {});
+                            // ScaffoldMessenger.of(context).showSnackBar(
+                            //   SnackBar(
+                            //     backgroundColor: orange,
+                            //     content: Text(
+                            //       "Please enter name",
+                            //       style: TextStyle(color: Colors.white),
+                            //     ),
+                            //   ),
+                            // );
                           } else {
+                            isNameError = false;
+                            setState(() {});
                             Overlay.of(context)!.insert(loader!);
                             _updateProfile();
                           }

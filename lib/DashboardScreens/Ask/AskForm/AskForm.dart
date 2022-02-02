@@ -31,7 +31,7 @@ class _AskFormState extends State<AskForm> {
   final picker = ImagePicker();
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   String? Description = "";
-  String? Url;
+  String Url = "";
   FormData formData = FormData();
   late final pickedFile;
   String? ImageUrl;
@@ -40,6 +40,7 @@ class _AskFormState extends State<AskForm> {
   @override
   void initState() {
     super.initState();
+    // Loader.hideLoader(loader!);
   }
 
   @override
@@ -141,6 +142,7 @@ class _AskFormState extends State<AskForm> {
           imageQuality: 20,
         )
         .then((value) => ImageUrl = value!.path);
+    print(" my picker: $ImageUrl");
     print(" my picker: $pickedFile");
     if (pickedFile == null) {
       Fluttertoast.showToast(msg: "Image is not Selected");
@@ -255,12 +257,12 @@ class _AskFormState extends State<AskForm> {
         Center(
           child: GestureDetector(
             onTap: () async {
-              if (pickedFile != null) {
+              if (ImageUrl != null) {
                 // print("description is $Description");
                 // print("Url is $Url");
                 Overlay.of(context)!.insert(loader!);
                 setState(() {
-                  sendData(ImageUrl!, Url!, Description!);
+                  sendData(ImageUrl!, Url, Description!);
                 });
                 // print(AskFormModalClass(
                 //         UserId: UserId,
