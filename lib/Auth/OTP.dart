@@ -171,6 +171,9 @@ class _OTPState extends State<OTP> {
             Shared.pref.setString("UserName", msg['data']['name'].toString());
             Shared.pref
                 .setString("mobileNumber", msg['data']['phone'].toString());
+            Shared.pref.setString("NAME", msg['data']['name'].toString());
+            Shared.pref.setString("PHONE", msg['data']['phone'].toString());
+
             Shared.pref.setString(
                 "wallet_balance", msg['data']['wallet_balance'].toString());
 

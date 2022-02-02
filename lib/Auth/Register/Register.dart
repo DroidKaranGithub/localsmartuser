@@ -48,12 +48,12 @@ class _RegisterState extends State<Register> {
           SnackBar(
             backgroundColor: Colors.red,
             content: Text(
-              'error',
+              msg['error'],
               style: TextStyle(color: Colors.white),
             ),
           ),
         );
-        Navigator.pop(context);
+        // Navigator.pop(context);
       } else {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return OTP(

@@ -28,30 +28,38 @@ class _EditProfileState extends State<EditProfile> {
   final emailController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final RegExp phoneRegex = new RegExp(r'^[6-9]\d{9}$');
-  final RegExp emailRegex =  RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+  final RegExp emailRegex = RegExp(
+      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 
   ProfileUpdateResponse profileUpdateResponse = ProfileUpdateResponse();
 
   @override
   void initState() {
     print("Init");
-    mName = Shared.pref.getString("NAME")!;
-    mEmail = Shared.pref.getString("EMAIL")!;
+    print("Init-> ${Shared.pref.getString("NAME")}");
+    mName = Shared.pref.getString("NAME") == null
+        ? ""
+        : Shared.pref.getString("NAME") == "null"
+            ? ""
+            : Shared.pref.getString("NAME")!;
+    mEmail = Shared.pref.getString("EMAIL") == null
+        ? ""
+        : Shared.pref.getString("EMAIL")!;
     super.initState();
   }
 
   Future<void> _updateProfile() async {
     String mUrl = BaseUrl + "profile/update";
     print("Update Profile URL--> $mUrl");
-    print("Update Profile NAME--> $Name");
-    print("Update Profile EMAIL--> $Email");
+    print("Update Profile NAME--> $mName");
+    print("Update Profile EMAIL--> $mEmail");
 
     Map<String, String> headers = {};
     var request = http.MultipartRequest(
       'POST',
       Uri.parse(mUrl),
     );
-    request.fields["user_id"] = Shared.pref.getInt("USER_ID")!.toString();
+    request.fields["user_id"] = Shared.pref.getString("USER_ID")!.toString();
     request.fields["name"] = mName;
     request.fields["email"] = mEmail;
     if (profileImagePath != null)
@@ -104,10 +112,14 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    Name = Shared.pref.getString("NAME")!;
-    Email = Shared.pref.getString("EMAIL")!;
-    print("PROFILE_IMAGE--> ${Shared.pref.getInt("USER_ID")!}");
-    print("PROFILE_IMAGE--> ${Shared.pref.getString("PROFILE_IMAGE")!}");
+    Name = Shared.pref.getString("NAME") == null
+        ? ""
+        : Shared.pref.getString("NAME")!;
+    Email = Shared.pref.getString("EMAIL") == null
+        ? ""
+        : Shared.pref.getString("EMAIL")!;
+    print("PROFILE_IMAGE--> ${Shared.pref.getString("USER_ID")!}");
+    // print("PROFILE_IMAGE--> ${Shared.pref.getString("PROFILE_IMAGE")!}");
     loader = Loader.overlayLoader(context);
 
     var height = AppBar().preferredSize.height;
@@ -146,23 +158,21 @@ class _EditProfileState extends State<EditProfile> {
                                   color: orange,
                                   borderRadius: BorderRadius.circular(40)),
                               child: isFromWeb
-                                  ? Shared.pref
-                                          .getString("PROFILE_IMAGE")!
-                                          .isEmpty
+                                  ? Shared.pref.getString("PROFILE_IMAGE") ==
+                                          null
                                       ? Icon(
                                           Icons.person,
                                           size: 30,
                                           color: Colors.white,
                                         )
-                                      : 
-                                      ClipRRect(
-                                      borderRadius: BorderRadius.circular(40),
-                                      child: Image.network(
-                                          Shared.pref
-                                              .getString("PROFILE_IMAGE")!,
-                                          fit: BoxFit.cover,
-                                        )
-                                    )
+                                      : ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(40),
+                                          child: Image.network(
+                                            Shared.pref
+                                                .getString("PROFILE_IMAGE")!,
+                                            fit: BoxFit.cover,
+                                          ))
                                   : ClipRRect(
                                       borderRadius: BorderRadius.circular(40),
                                       child: Image.file(
