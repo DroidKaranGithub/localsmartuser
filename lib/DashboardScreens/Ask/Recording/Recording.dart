@@ -175,8 +175,8 @@ class _RecordingState extends State<Recording> {
 
     setState(() {});
     print(_mPathMP3);
-    print(Shared.pref.getInt("userPerticulaId"));
-    upload(Shared.pref.getInt("userPerticulaId").toString(), _mPathMP3);
+    print(Shared.pref.getInt("USER_ID"));
+    upload(Shared.pref.getInt("USER_ID").toString(), _mPathMP3);
     print('helooooooooooooooooooooooooooooooo');
   }
 
