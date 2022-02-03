@@ -57,12 +57,12 @@ class _drawerState extends State<drawer> {
                                     color: Colors.white,
                                   )
                                 : Image.network(
-                                    "https://th.bing.com/th/id/OIP.kcaJsnMsMsFRdU6d1m2v6AHaHa?pid=ImgDet&rs=1"
-                                    // Shared.pref
-                                    //     .getString("PROFILE_IMAGE")
-                                    //     .toString(),
-                                    // fit: BoxFit.cover,
-                                    )),
+                                    // "https://th.bing.com/th/id/OIP.kcaJsnMsMsFRdU6d1m2v6AHaHa?pid=ImgDet&rs=1"
+                                    Shared.pref
+                                        .getString("PROFILE_IMAGE")
+                                        .toString(),
+                                    fit: BoxFit.cover,
+                                  )),
                       ),
                       SizedBox(
                         height: 10,

@@ -3,14 +3,11 @@ import 'dart:convert';
 import 'package:client_ajay_user_panel/ApiRepository/ApiRepository.dart';
 import 'package:client_ajay_user_panel/Auth/OTP.dart';
 import 'package:client_ajay_user_panel/Auth/Register/RegisterOTPModalClass.dart';
-import 'package:client_ajay_user_panel/Auth/Register/RegisterUserModalClass.dart';
 import 'package:client_ajay_user_panel/Constants/ColorButton.dart';
 import 'package:client_ajay_user_panel/Constants/Constant.dart';
 import 'package:client_ajay_user_panel/Constants/InputField.dart';
 import 'package:client_ajay_user_panel/Constants/LoaderClass.dart';
-import 'package:client_ajay_user_panel/DashboardScreens/Ask/Ask.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class Register extends StatefulWidget {
   static String id = "Register";

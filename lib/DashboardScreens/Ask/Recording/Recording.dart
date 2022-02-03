@@ -100,6 +100,7 @@ class _RecordingState extends State<Recording> {
     // _mPlayer = null;
 
     _mRecorder.closeAudioSession();
+    Loader.removeLoader(loader!);
     // _mRecorder = null;
     super.dispose();
   }
@@ -406,7 +407,7 @@ class _RecordingState extends State<Recording> {
                           Future.delayed(Duration(microseconds: 1500), () {
                             play3();
                             Loader.hideLoader(loader!);
-                            setState(() {});
+                            // setState(() {});
                           });
                         } else {
                           Overlay.of(context)!.insert(loader!);
@@ -418,7 +419,7 @@ class _RecordingState extends State<Recording> {
                           Future.delayed(Duration(microseconds: 1500), () {
                             play3();
                             Loader.hideLoader(loader!);
-                            setState(() {});
+                            // setState(() {});
                           });
                         }
                       } else {

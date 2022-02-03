@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -78,10 +80,12 @@ class _LoginState extends State<Login> {
         Shared.pref.setInt("userPerticulaId", int.parse(body1.id!));
         Shared.pref.setString("USER_ID", body1.id!);
         Shared.pref.setString("UserName", body1.name.toString());
-        
+
         Shared.pref.setString("mobileNumber", body1.phone.toString());
         Shared.pref.setString("NAME", body1.name.toString());
         Shared.pref.setString("PHONE", body1.phone.toString());
+        Shared.pref.setString("PROFILE_IMAGE",
+            body1.profile_image != null ? body1.profile_image! : "");
         Shared.pref
             .setString("wallet_balance", body1.wallet_balance.toString());
         Shared.pref.setBool("Login", true);

@@ -46,6 +46,7 @@ class _AskFormState extends State<AskForm> {
   @override
   void dispose() {
     super.dispose();
+    Loader.removeLoader(loader!);
   }
 
   // senData(String imageUrl, String url, String desc) {
