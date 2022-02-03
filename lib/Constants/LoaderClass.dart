@@ -20,10 +20,18 @@ class Loader {
   }
 
   static hideLoader(OverlayEntry loader) {
-    Timer(Duration(seconds: 6), () {
+    Timer(Duration(seconds: 3), () {
       try {
         loader.remove();
-      } catch (e) {}
+      } catch (e) {
+        debugPrint("LOADER_EXCEPTION :: ${e.toString()}");
+      }
     });
+  }
+
+  static removeLoader(OverlayEntry loader) {
+    try {
+      loader.remove();
+    } catch (e) {}
   }
 }

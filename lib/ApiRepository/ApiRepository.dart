@@ -1,12 +1,10 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:client_ajay_user_panel/DashboardScreens/Ask/Recording/RecordingModalClass.dart';
-import 'package:client_ajay_user_panel/DashboardScreens/Responses/Responses.dart';
-import 'package:dio/dio.dart';
 import 'package:client_ajay_user_panel/Constants/Constant.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart' as http_parser;
 

@@ -1,11 +1,10 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 
 import 'package:client_ajay_user_panel/ApiRepository/ApiRepository.dart';
-import 'package:client_ajay_user_panel/Auth/Login/Login.dart';
-import 'package:client_ajay_user_panel/Auth/Login/LoginModalClass.dart';
 import 'package:client_ajay_user_panel/Auth/Register/RegisterOTPModalClass.dart';
 import 'package:client_ajay_user_panel/Auth/Register/RegisterUserModalClass.dart';
-import 'package:client_ajay_user_panel/Auth/Register/ResendOtpModel.dart';
 import 'package:client_ajay_user_panel/Constants/ColorButton.dart';
 import 'package:client_ajay_user_panel/Constants/Constant.dart';
 import 'package:client_ajay_user_panel/Constants/InputField.dart';

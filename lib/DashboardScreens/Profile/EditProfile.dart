@@ -87,15 +87,25 @@ class _EditProfileState extends State<EditProfile> {
 
     profileUpdateResponse = ProfileUpdateResponse.fromJson(response);
     if (apiResponse.statusCode == 200) {
+      Loader.removeLoader(loader!);
+
       if (profileUpdateResponse.status!) {
         savePref().whenComplete(() {
-          Loader.hideLoader(loader!);
           Navigator.pop(context);
         });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: orange,
+            content: Text(
+              profileUpdateResponse.message.toString(),
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
       }
-      setState(() {});
     } else {
-      setState(() {});
+      Loader.removeLoader(loader!);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: orange,
@@ -109,13 +119,18 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future<void> savePref() async {
+    debugPrint("IMAGE-->${profileUpdateResponse.data!.profileImage}");
     Shared.pref.setString("NAME", profileUpdateResponse.data!.name!);
-    Shared.pref.setString("EMAIL", profileUpdateResponse.data!.email!);
+    if (profileUpdateResponse.data!.email != null) {
+      Shared.pref.setString("EMAIL", profileUpdateResponse.data!.email!);
+    }
     Shared.pref.setString(
         "PROFILE_IMAGE",
         profileUpdateResponse.data!.profileImage != null
             ? profileUpdateResponse.data!.profileImage!
             : "");
+    debugPrint(
+        "IMAGE_PROFILE_IMAGE-->${Shared.pref.getString("PROFILE_IMAGE")}");
   }
 
   @override
@@ -437,8 +452,8 @@ class _EditProfileState extends State<EditProfile> {
                             // );
                           } else {
                             isNameError = false;
-                            setState(() {});
                             Overlay.of(context)!.insert(loader!);
+
                             _updateProfile();
                           }
                         },
@@ -533,7 +548,7 @@ class _EditProfileState extends State<EditProfile> {
   File? profileImageFile;
   void _imagePickerFromCamera() async {
     var imageCamera = await ImagePicker()
-        .pickImage(source: ImageSource.camera, imageQuality: 100);
+        .pickImage(source: ImageSource.camera, imageQuality: 50);
     setState(() {
       if (imageCamera!.path.isNotEmpty) {
         profileImagePath = imageCamera.path;
