@@ -288,16 +288,22 @@ class _InquriesState extends State<Inquries> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    print(Title[index]);
+                    print("TITLE_INDEX-->${Title[index]}");
                     Shared.pref.setString("title", Title[index]);
-                    if (ResponseCount[index].toString() == "0") {
-                    } else {
+                    if (ResponseCount[index].toString() != "0") {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return Responses(
                           QueryId: int.parse(Id[index]),
                         );
                       }));
+                    } else {
+                      // Navigator.push(context,
+                      //     MaterialPageRoute(builder: (context) {
+                      //   return Responses(
+                      //     QueryId: int.parse(Id[index]),
+                      //   );
+                      // }));
                     }
                   },
                   child: Stack(

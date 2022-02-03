@@ -43,9 +43,9 @@ class _ResponsesState extends State<Responses> {
   }
 
   getData(int queryid) {
-    int? userId = int.parse(Shared.pref.getInt("userParticulaId").toString());
+    int? userId = int.parse(Shared.pref.getString("USER_ID")!);
     print(
-        "qid $queryid and user id ${Shared.pref.getInt("userParticulaId").toString()}");
+        "qid $queryid and user id ${Shared.pref.getString("userParticulaId").toString()}");
     ApiRepository().GetResponse(userId, queryid).then((value) {
       //log(value.body);
 
@@ -230,7 +230,7 @@ class _ResponsesState extends State<Responses> {
                               ),
                               Expanded(
                                 child: Container(
-                                  height: 100,
+                                  // height: 100,
                                   width: MediaQuery.of(context).size.width,
                                   //color: Colors.red,
                                   child: Column(

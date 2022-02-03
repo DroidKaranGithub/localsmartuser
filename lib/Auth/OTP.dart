@@ -164,7 +164,11 @@ class _OTPState extends State<OTP> {
             Shared.pref.setBool("Login", true);
             Shared.pref.setInt(
                 "userParticulaId", int.parse(msg['data']['id'].toString()));
+            debugPrint(
+                "userParticulaId-->${Shared.pref.getInt("userParticulaId")}");
+
             Shared.pref.setString("USER_ID", msg['data']['id'].toString());
+            debugPrint("USER_ID-->${Shared.pref.getString("USER_ID")}");
             // Shared.pref.setInt(
             //     "userPerticularId", int.parse(msg['data']['id']).toInt());
             Shared.pref.setString("UserName", msg['data']['name'].toString());

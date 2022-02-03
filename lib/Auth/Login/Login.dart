@@ -75,10 +75,15 @@ class _LoginState extends State<Login> {
       var body1 = LoginModalClass.fromJson(jsonDecode(value.body)).user;
       if (body.Code == 200) {
         print("myuser id is : ${body1!.id}");
+        int user_id = int.parse(body1.id!);
+        debugPrint("user_id-->$user_id");
         //  Shared.pref.setString("UserID", body1.id.toString());
         print(body1.id);
-        Shared.pref.setInt("userPerticulaId", int.parse(body1.id!));
+        Shared.pref.setInt("userPerticulaId", user_id);
         Shared.pref.setString("USER_ID", body1.id!);
+        debugPrint(
+            "userPerticulaId-->${Shared.pref.getInt("userPerticulaId")}");
+        debugPrint("USER_ID-->${Shared.pref.getString("USER_ID")}");
         Shared.pref.setString("UserName", body1.name.toString());
 
         Shared.pref.setString("mobileNumber", body1.phone.toString());
