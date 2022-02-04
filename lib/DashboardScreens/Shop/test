@@ -1,0 +1,77 @@
+{
+    "response": {
+        "id": 13,
+        "query_id": 78,
+        "shop_id": 11,
+        "title": null,
+        "price": "4000",
+        "status": 0,
+        "status_by_customer": 0,
+        "response": "Tester Recording vendor reply",
+        "response_pdf": null,
+        "response_link": "",
+        "created_at": "2022-02-03T14:26:56.000000Z",
+        "updated_at": "2022-02-03T14:26:56.000000Z",
+        "deleted_at": null,
+        "response_images": []
+    },
+    "shop": {
+        "id": 11,
+        "user_id": 80,
+        "shop_name": "Partners",
+        "owner_name": "Push",
+        "business_type": "Product Services",
+        "contact_number": "7976955311",
+        "email": "testingworks20@gmail.com",
+        "address": "Udaipur",
+        "website_url": "gooddot.com",
+        "gst_number": "",
+        "personal_kyc_doc_name": "PAN",
+        "personal_kyc_doc": "https://viragtea.com/localsmart/public/uploads/documents/61ed8fc120c64.jpg",
+        "personal_kyc_doc_number": "",
+        "business_kyc_doc_name": "GST Number",
+        "business_kyc_doc": "https://viragtea.com/localsmart/public/uploads/documents/61ed8fc12f04c.jpg",
+        "business_kyc_doc_number": "",
+        "shop_images": [
+            {
+                "image": "https://viragtea.com/localsmart/public/uploads/shop_images/61ed8fc0ea1aa.jpg"
+            },
+            {
+                "image": "https://viragtea.com/localsmart/public/uploads/shop_images/61ed8fc1189ed.jpg"
+            }
+        ],
+        "state_id": 0,
+        "city_id": 0,
+        "pincode": null,
+        "address1": null,
+        "map_location": null,
+        "zip_code": null,
+        "status": 1,
+        "verified_status": 0,
+        "drive_link": null,
+        "latitude": null,
+        "longitude": null,
+        "business_kyc_document_id": null,
+        "business_uploaded_document_id": null,
+        "created_at": "2022-01-23T22:56:25.000000Z",
+        "updated_at": "2022-01-23T17:26:25.000000Z",
+        "deleted_at": null,
+        "categories": [
+            {
+                "id": 6,
+                "name": "Mens Clothing",
+                "status": 1,
+                "is_parent": 1,
+                "parent_id": null,
+                "biding_charge_price": 7,
+                "hotdeals_price": null,
+                "created_at": "2021-12-07T08:01:45.000000Z",
+                "updated_at": "2021-12-18T16:34:02.000000Z",
+                "deleted_at": null
+            }
+        ],
+        "category": "Mens Clothing",
+        "vendor": null
+    },
+    "status": true
+}

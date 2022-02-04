@@ -87,16 +87,21 @@ class ApiRepository {
 
   Future<http.Response> GetResponse(int id, int queryId) async {
     String Url = BaseUrl + "response/list?query_id=$queryId&user_id=$id";
+    print("REQUEST_URL-->" + Url);
     var body = await http.get(Uri.parse(Url));
+    print("Response_BODY-->" + body.body.toString());
+
     return body;
   }
 
 //https://viragtea.com/localsmart/public/api/response/details/4
   Future<http.Response> GetShopDetail(int userId) async {
     String Url = BaseUrl + "response/details/$userId";
+    print("REQUEST_URL-->" + Url);
     var body = await http.get(
       Uri.parse(Url),
     );
+    print("Response_BODY-->" + body.body.toString());
     return body;
   }
 

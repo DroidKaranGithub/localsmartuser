@@ -54,9 +54,11 @@ class _ResponsesState extends State<Responses> {
       Status = body.status;
 
       print(Status);
+
       setState(() {});
       if (body.status.toString() == "true") {
         var body1 = ResponseModalClass.fromJson(jsonDecode(value.body)).data;
+
         print(body1);
 
         if (body1!.isEmpty) {
@@ -75,6 +77,9 @@ class _ResponsesState extends State<Responses> {
             Id.add(element.shop?.id);
             Shop.add(element.shop!.shopName);
             Address.add(element.shop!.address);
+            for (int i = 0; i < element.shop!.shopImages!.length; i++) {
+              Images.add(element.shop!.shopImages![i]);
+            }
           });
         }
       }
@@ -85,6 +90,7 @@ class _ResponsesState extends State<Responses> {
       print("images $Images");
       print("id is ${Id}");
       print("shops $Shop");
+      print("IMAGES $Images");
       print("address $Address");
     });
   }
@@ -152,6 +158,9 @@ class _ResponsesState extends State<Responses> {
       child: ListView.builder(
         itemCount: Id.length,
         itemBuilder: (context, index) {
+          debugPrint("IMAGES--> ${Images[index]['image']}");
+          var storeImage = Images[index]['image'];
+          debugPrint("storeImage__IMAGES--> $storeImage");
           return GestureDetector(
             onTap: () {
               Shared.pref.setString("price", Rate[index].toString());
@@ -296,10 +305,17 @@ class _ResponsesState extends State<Responses> {
                           ),
                         ),
                         Container(
-                            color: Colors.white,
                             width: 120,
-                            child: Image(
-                                image: AssetImage("assets/images/sofa.png")))
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12.0),
+                                child: Images.isNotEmpty
+                                    ? Image.network(
+                                        storeImage.toString(),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image(
+                                        image: AssetImage(
+                                            "assets/images/sofa.png"))))
                       ],
                     ),
                     SizedBox(
@@ -333,7 +349,7 @@ class _ResponsesState extends State<Responses> {
                                   color: Colors.white,
                                 ),
                                 SizedBox(
-                                  width: 10,
+                                  width: 10,  
                                 ),
                                 Text(
                                   "Call Now",

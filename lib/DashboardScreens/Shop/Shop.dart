@@ -1,15 +1,16 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:client_ajay_user_panel/ApiRepository/ApiRepository.dart';
 import 'package:client_ajay_user_panel/ConstantDrawer.dart';
 import 'package:client_ajay_user_panel/Constants/Constant.dart';
 import 'package:client_ajay_user_panel/Constants/RoundedCard.dart';
+import 'package:client_ajay_user_panel/DashboardScreens/Shop/ShopDetailsResponse/shop_details_response.dart';
+import 'package:client_ajay_user_panel/DashboardScreens/Shop/ShopDetailsResponse/shop_image.dart';
 import 'package:client_ajay_user_panel/DashboardScreens/Shop/ShopModalClass.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ShopName extends StatefulWidget {
   // String? ShopId;
@@ -20,11 +21,13 @@ class ShopName extends StatefulWidget {
 }
 
 class _ShopNameState extends State<ShopName> {
-  List ImagesList = [];
+  List<ShopImage> ImagesList = [];
+  List Category = [];
   String? ShopName;
   bool? Status;
   String? OwnerName;
-  String? Category;
+  String? categories = "";
+  String contactNumber = "";
   String? Address;
   String? Url;
   String? Description;
@@ -83,7 +86,27 @@ class _ShopNameState extends State<ShopName> {
     var height = AppBar().preferredSize.height;
     return Column(
       children: [
-        CarouselSlider(
+        CarouselSlider.builder(
+          itemCount: ImagesList.length > 0 ? ImagesList.length : 1,
+          itemBuilder: (BuildContext context, int index, int realIdx) {
+            return Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              elevation: 3,
+              child: Container(
+                // decoration:
+                //     BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                width: 200,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.network(
+                    ImagesList[index].image!,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            );
+          },
           options: CarouselOptions(
               height: 180,
               aspectRatio: 16 / 9,
@@ -98,31 +121,72 @@ class _ShopNameState extends State<ShopName> {
               // enlargeCenterPage: true,
               scrollDirection: Axis.horizontal,
               onPageChanged: (val, page) {
+                debugPrint("VAL-> $val");
+                debugPrint("PAGE-> $page");
                 Imageindex = val;
                 setState(() {});
               }),
-          items: [
-            for (int i = 0; i < 5; i++)
-              Container(
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                width: 200,
-                child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    elevation: 3,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.network(
-                        "https://thumbs.dreamstime.com/z/electronics-store-shelves-different-products-stand-row-photo-was-taken-one-supermarkets-toronto-57629991.jpg",
-                        fit: BoxFit.cover,
-                      ),
-                    )),
-              )
-          ],
         ),
-        // new DotsIndicator(
-        //     dotsCount: ImagesList.length, position: Imageindex.toDouble()),
+        // CarouselSlider(
+        //   options: CarouselOptions(
+        //       height: 180,
+        //       aspectRatio: 16 / 9,
+        //       viewportFraction: 1,
+        //       initialPage: 0,
+        //       //enableInfiniteScroll: true,
+        //       reverse: false,
+        //       autoPlay: true,
+        //       //  autoPlayInterval: Duration(seconds: 3),
+        //       autoPlayAnimationDuration: Duration(milliseconds: 800),
+        //       autoPlayCurve: Curves.fastOutSlowIn,
+        //       // enlargeCenterPage: true,
+        //       scrollDirection: Axis.horizontal,
+        //       onPageChanged: (val, page) {
+        //         Imageindex = val;
+        //         setState(() {});
+        //       }),
+        //   items: [
+        //     ...ImagesList.map((e) {
+        //       debugPrint("IMAGES_CARA-->${e} ");
+        //       return Container(
+        //         decoration:
+        //             BoxDecoration(borderRadius: BorderRadius.circular(20)),
+        //         width: 200,
+        //         child: Card(
+        //             shape: RoundedRectangleBorder(
+        //                 borderRadius: BorderRadius.circular(20)),
+        //             elevation: 3,
+        //             child: Padding(
+        //               padding: const EdgeInsets.all(8.0),
+        //               child: Image.network(
+        //                 e['image'].toString(),
+        //                 fit: BoxFit.cover,
+        //               ),
+        //             )),
+        //       );
+        //     }).toList(),
+        //     // for (int i = 0; i < 2; i++)
+        //     //   Container(
+        //     //     decoration:
+        //     //         BoxDecoration(borderRadius: BorderRadius.circular(20)),
+        //     //     width: 200,
+        //     //     child: Card(
+        //     //         shape: RoundedRectangleBorder(
+        //     //             borderRadius: BorderRadius.circular(20)),
+        //     //         elevation: 3,
+        //     //         child: Padding(
+        //     //           padding: const EdgeInsets.all(8.0),
+        //     //           child: Image.network(
+        //     //             "https://thumbs.dreamstime.com/z/electronics-store-shelves-different-products-stand-row-photo-was-taken-one-supermarkets-toronto-57629991.jpg",
+        //     //             fit: BoxFit.cover,
+        //     //           ),
+        //     //         )),
+        //     //   )
+        //   ],
+        // ),
+        new DotsIndicator(
+            dotsCount: ImagesList.length > 0 ? ImagesList.length : 1,
+            position: Imageindex.toDouble()),
         SizedBox(
           height: 10,
         ),
@@ -297,7 +361,7 @@ class _ShopNameState extends State<ShopName> {
                 RoundedCard(
                   child: Padding(
                     padding: const EdgeInsets.all(10),
-                    child: Text(' Furniture', style: style),
+                    child: Text(categories.toString(), style: style),
                   ),
                 )
               ],
@@ -361,17 +425,32 @@ class _ShopNameState extends State<ShopName> {
       // print(jsonDetail);
       Status = body['status'];
       setState(() {});
-      var bodyDetails = ResponseDetails.fromJson(jsonDetail);
+      // var bodyDetails = ResponseDetails.fromJson(jsonDetail);
+      ShopDetailsResponse shopDetailsResponse =
+          ShopDetailsResponse.fromJson(value.body);
       //log(bodyData.toString());
       if (Status == true) {
-        print(bodyDetails.description);
+        print("DESCRIPTION-->${shopDetailsResponse.response!.response}");
         // bodyData.forEach((element) {
         //   print(element);
-        ShopName = bodyDetails.shop_name;
-        OwnerName = bodyDetails.owner_name;
-        Address = bodyDetails.address;
-        Url = bodyDetails.website_url;
-        Description = bodyDetails.description;
+        contactNumber = shopDetailsResponse.shop!.contactNumber!;
+        ShopName = shopDetailsResponse.shop!.shopName;
+        OwnerName = shopDetailsResponse.shop!.ownerName;
+        Address = shopDetailsResponse.shop!.address;
+        Url = shopDetailsResponse.shop!.websiteUrl;
+        Description = shopDetailsResponse.response!.response;
+        for (int i = 0; i < shopDetailsResponse.shop!.shopImages!.length; i++) {
+          ImagesList.add(shopDetailsResponse.shop!.shopImages![i]);
+        }
+        for (int i = 0; i < shopDetailsResponse.shop!.categories!.length; i++) {
+          Category.add(shopDetailsResponse.shop!.categories![i].name);
+        }
+        print("Category $Category");
+        if (Category.isNotEmpty) {
+          categories = Category.join(", ");
+        }
+        print("categories $categories");
+        // for(int i=0; i<bodyDetails.sh)
         //   element.shopImages!
         //       .forEach((element) => ImagesList.add(element.image));
         // });
@@ -415,38 +494,46 @@ class _ShopNameState extends State<ShopName> {
                         SizedBox(
                           height: 30,
                         ),
-                        Card(
-                          elevation: 10,
-                          child: Container(
-                            // height: 20,
-                            width: MediaQuery.of(context).size.width * 0.6,
-                            decoration: BoxDecoration(
-                                color: orange,
-                                borderRadius: BorderRadius.circular(5)),
+                        GestureDetector(
+                          onTap: () {
+                            contactNumber.isEmpty
+                                ? Fluttertoast.showToast(
+                                    msg: "Contact number is not available")
+                                : _makingPhoneCall(contactNumber);
+                          },
+                          child: Card(
+                            elevation: 10,
+                            child: Container(
+                              // height: 20,
+                              width: MediaQuery.of(context).size.width * 0.6,
+                              decoration: BoxDecoration(
+                                  color: orange,
+                                  borderRadius: BorderRadius.circular(5)),
 
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.phone,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    "Call Now",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline1!
-                                        .copyWith(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold),
-                                  )
-                                ],
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.phone,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      "Call Now",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline1!
+                                          .copyWith(
+                                              color: Colors.white,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -457,5 +544,15 @@ class _ShopNameState extends State<ShopName> {
                 ),
               )
             : Container());
+  }
+
+  Future _makingPhoneCall(String mobile) async {
+    String url = "tel:" + mobile;
+    print(url);
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

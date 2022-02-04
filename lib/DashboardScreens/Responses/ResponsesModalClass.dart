@@ -116,7 +116,7 @@ class ResponseShop {
   String? businessKycDocName;
   String? businessKycDoc;
   String? businessKycDocNumber;
-  List? shopImages;
+  List? shopImages = [];
   String? stateId;
   String? cityId;
   String? pincode;
@@ -190,7 +190,8 @@ class ResponseShop {
     if (json['shop_images'] != null) {
       json['shop_images'].forEach((v) {
         shopImages?.add(v);
-        print("shop image url $v");
+        print("shop image url V $v");
+        print("shop image url $shopImages");
       });
     }
     stateId = json['state_id'].toString();
