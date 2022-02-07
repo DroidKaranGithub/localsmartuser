@@ -80,7 +80,7 @@ class _RecordingState extends State<Recording> {
 
   @override
   void initState() {
-    _mPlayer.openAudioSession().then((value) {
+    _mPlayer.closeAudioSession().then((value) {
       setState(() {
         _mPlayerIsInited = true;
       });
@@ -96,9 +96,11 @@ class _RecordingState extends State<Recording> {
 
   @override
   void dispose() {
+    // _mPlayer.closeAudioSession();
     _mPlayer.closeAudioSession();
     // _mPlayer = null;
 
+    // _mRecorder.closeAudioSession();
     _mRecorder.closeAudioSession();
     Loader.removeLoader(loader!);
     // _mRecorder = null;
@@ -115,13 +117,14 @@ class _RecordingState extends State<Recording> {
         throw RecordingPermissionException('Microphone permission not granted');
       }
     }
-    await _mRecorder.openAudioSession();
+    await _mRecorder.closeAudioSession();
     _mRecorderIsInited = true;
   }
 
   // ----------------------  Here is the code for recording, convertFile(), and playback -------
   bool isRecording = false;
   void record() async {
+    _mRecorder.openAudioSession();
     isRecording = true;
     var directory = await getApplicationDocumentsDirectory();
     _mPathAAC = directory.path +
@@ -129,6 +132,7 @@ class _RecordingState extends State<Recording> {
         DateTime.now().millisecondsSinceEpoch.toString() +
         '.aac';
     debugPrint("PATH-->--> $_mPathAAC");
+
     _mRecorder
         .startRecorder(
       toFile: _mPathAAC,
@@ -158,6 +162,8 @@ class _RecordingState extends State<Recording> {
 
     await FlutterSoundHelper()
         .convertFile(_mPathAAC, Codec.aacADTS, _mPathMP3, Codec.mp3);
+    // await FlutterSoundHelper()
+    //     .pcmToWave(inputFile: _mPathAAC, outputFile: _mPathMP3);
     await _mPlayer.startPlayer(
         codec: Codec.mp3,
         fromURI: _mPathMP3,
@@ -173,11 +179,13 @@ class _RecordingState extends State<Recording> {
   Future<void> play3() async {
     await FlutterSoundHelper()
         .convertFile(_mPathAAC, Codec.aacADTS, _mPathMP3, Codec.mp3);
+    // await FlutterSoundHelper()
+    //     .pcmToWave(inputFile: _mPathAAC, outputFile: _mPathMP3);
 
     setState(() {});
     print(_mPathMP3);
-    print(Shared.pref.getInt("USER_ID"));
-    upload(Shared.pref.getInt("USER_ID").toString(), _mPathMP3);
+    print(Shared.pref.getString("USER_ID"));
+    upload(Shared.pref.getString("USER_ID").toString(), _mPathMP3);
     print('helooooooooooooooooooooooooooooooo');
   }
 

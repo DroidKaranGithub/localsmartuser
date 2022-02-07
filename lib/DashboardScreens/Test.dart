@@ -108,6 +108,8 @@ class _ConvertToMp3State extends State<ConvertToMp3> {
 
     await FlutterSoundHelper()
         .convertFile(_mPathAAC, Codec.aacADTS, _mPathMP3, Codec.mp3);
+    // await FlutterSoundHelper()
+    //     .pcmToWave(inputFile: _mPathAAC, outputFile: _mPathMP3);
     await _mPlayer!.startPlayer(
         codec: Codec.mp3,
         fromURI: _mPathMP3,

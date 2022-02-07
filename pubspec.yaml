@@ -24,7 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_sound: ^8.2.5
-  permission_handler: ^6.0.1
+  permission_handler: ^8.3.0  
   lottie: ^1.1.0
   carousel_slider: ^4.0.0
   dots_indicator: ^2.0.0
@@ -35,7 +35,7 @@ dependencies:
   shared_preferences: ^2.0.6
   dio: ^4.0.4
   image_picker: ^0.8.4
-  assets_audio_player: ^3.0.3+6
+  assets_audio_player: ^3.0.4 
   cupertino_icons: ^1.0.2
   url_launcher: ^6.0.10
   path_provider: ^2.0.8
