@@ -48,9 +48,9 @@ class _drawerState extends State<drawer> {
                         child: ClipRRect(
                             borderRadius: BorderRadius.circular(40),
                             child: Shared.pref
-                                    .getString("PROFILE_IMAGE")
-                                    .toString()
-                                    .isEmpty
+                                        .getString("PROFILE_IMAGE")
+                                        .toString() ==
+                                    "null"
                                 ? Icon(
                                     Icons.person,
                                     size: 30,

@@ -155,6 +155,8 @@ class _RecordingState extends State<Recording> {
   }
 
   Future<void> play() async {
+    _mPlayer.openAudioSession();
+    print('play');
     assert(_mPlayerIsInited &&
         _mplaybackReady &&
         _mRecorder.isStopped &&
@@ -162,8 +164,7 @@ class _RecordingState extends State<Recording> {
 
     await FlutterSoundHelper()
         .convertFile(_mPathAAC, Codec.aacADTS, _mPathMP3, Codec.mp3);
-    // await FlutterSoundHelper()
-    //     .pcmToWave(inputFile: _mPathAAC, outputFile: _mPathMP3);
+
     await _mPlayer.startPlayer(
         codec: Codec.mp3,
         fromURI: _mPathMP3,
@@ -228,6 +229,7 @@ class _RecordingState extends State<Recording> {
       return null;
     }
     print('playyyyyyyyyyyyyyyyyy');
+    print('playyyyyyyyyyyyyyyyyy_->${_mPlayer.isStopped}');
     return _mPlayer.isStopped ? play : stopPlayer;
   }
 
@@ -305,12 +307,14 @@ class _RecordingState extends State<Recording> {
                     visible: AudioList!.isEmpty ? false : true,
                     child: InkWell(
                         onTap: () {
-                          if (_mPlayer.isStopped) {
-                            getPlaybackFn();
-                          }
-                          if (_mPlayer.isPlaying) {
-                            stopPlayer();
-                          }
+                          // if (_mPlayer.isStopped) {
+                          //   debugPrint("PLAYER-->getPlaybackFn");
+                          //   getPlaybackFn();
+                          // }
+                          // if (_mPlayer.isPlaying) {
+                          //   debugPrint("PLAYER-->stopPlayer");
+                          //   stopPlayer();
+                          // }
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.5,
@@ -319,7 +323,24 @@ class _RecordingState extends State<Recording> {
                               color: Blue,
                               borderRadius: BorderRadius.circular(30)),
                           child: ElevatedButton(
-                            onPressed: getPlaybackFn(),
+                            // onPressed: getPlaybackFn(),
+                            onPressed: () {
+                              debugPrint("PLAYER-->onPressed");
+                              if (_mPlayer.isStopped) {
+                                debugPrint("PLAYER-->getPlaybackFn");
+                                // getPlaybackFn();
+                                if (!_mPlayerIsInited ||
+                                    !_mplaybackReady ||
+                                    !_mRecorder.isStopped) {
+                                  return null;
+                                }
+                                play();
+                              }
+                              if (_mPlayer.isPlaying) {
+                                debugPrint("PLAYER-->stopPlayer");
+                                stopPlayer();
+                              }
+                            },
                             //color: Colors.white,
                             //disabledColor: Colors.grey,
                             child: Icon(

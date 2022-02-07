@@ -62,7 +62,7 @@ class _ProfileState extends State<Profile> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(40),
                                 child: Shared.pref.getString("PROFILE_IMAGE") ==
-                                        null
+                                        "null"
                                     ? Icon(
                                         Icons.person,
                                         size: 30,

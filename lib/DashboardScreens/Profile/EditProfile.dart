@@ -182,7 +182,7 @@ class _EditProfileState extends State<EditProfile> {
                                   borderRadius: BorderRadius.circular(40)),
                               child: isFromWeb
                                   ? Shared.pref.getString("PROFILE_IMAGE") ==
-                                          null
+                                          "null"
                                       ? Icon(
                                           Icons.person,
                                           size: 30,

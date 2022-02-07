@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:client_ajay_user_panel/ApiRepository/ApiRepository.dart';
 import 'package:client_ajay_user_panel/ConstantDrawer.dart';
@@ -23,6 +24,8 @@ class AskForm extends StatefulWidget {
 }
 
 class _AskFormState extends State<AskForm> {
+  bool isUrlError = false;
+  String validationMessage = "";
   String? UserId = Shared.pref.getString("UserID");
   OverlayEntry? loader;
   Dio dio = new Dio();
@@ -33,8 +36,9 @@ class _AskFormState extends State<AskForm> {
   String? Description = "";
   String Url = "";
   FormData formData = FormData();
-  late final pickedFile;
+  File? pickedFile;
   String? ImageUrl;
+  File? imagePath;
   bool? IsImage = false;
   var height;
   @override
@@ -97,6 +101,7 @@ class _AskFormState extends State<AskForm> {
 
     AskFormModalClass askFormModalClass = AskFormModalClass.fromJson(response);
     if (apiResponse.statusCode == 200) {
+      // Loader.removeLoader(loader!);
       print("resp : ${response}");
       if (askFormModalClass.Status!) {
         // response.forEach((key, value) {
@@ -139,13 +144,18 @@ class _AskFormState extends State<AskForm> {
   Future getGallaryImage() async {
     pickedFile = await picker
         .getImage(
-          source: ImageSource.gallery,
-          imageQuality: 20,
-        )
-        .then((value) => ImageUrl = value!.path);
+      source: ImageSource.gallery,
+      imageQuality: 20,
+    )
+        .then((value) {
+      ImageUrl = value!.path;
+      imagePath = File(ImageUrl!);
+      setState(() {});
+    });
     print(" my picker: $ImageUrl");
+    print(" my picker imagePath: $imagePath");
     print(" my picker: $pickedFile");
-    if (pickedFile == null) {
+    if (imagePath == null) {
       Fluttertoast.showToast(msg: "Image is not Selected");
     } else {
       Fluttertoast.showToast(msg: "Image is Selected");
@@ -174,18 +184,33 @@ class _AskFormState extends State<AskForm> {
               SizedBox(
                 width: 20,
               ),
-              InputField(
-                IsEnable: false,
-                // height: 60,
-                width: MediaQuery.of(context).size.width * 0.7,
-                keyboardType: TextInputType.text,
-                // onChanged: (val){},
-                IsBorder: true,
-                IsStyle: true,
-                style: Theme.of(context).textTheme.headline1!.copyWith(
-                    fontSize: 15, fontWeight: FontWeight.bold, color: orange),
-                hint: 'Image Upload',
-              ),
+              imagePath == null
+                  ? InputField(
+                      IsEnable: false,
+                      // height: 60,
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      keyboardType: TextInputType.text,
+                      // onChanged: (val){},
+                      IsBorder: true,
+                      IsStyle: true,
+                      style: Theme.of(context).textTheme.headline1!.copyWith(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: orange),
+                      hint: 'Image Upload',
+                    )
+                  : Container(
+                      margin: EdgeInsets.only(left: 8.0),
+                      width: MediaQuery.of(context).size.width * 0.66,
+                      height: 55.0,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(30.0),
+                        child: Image.file(
+                          imagePath!,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
             ],
           ),
         ),
@@ -203,6 +228,7 @@ class _AskFormState extends State<AskForm> {
             ),
             InputField(
               // height: 60,
+              error: isUrlError ? validationMessage : "",
               width: MediaQuery.of(context).size.width * 0.7,
               keyboardType: TextInputType.text,
               onChanged: (val) {
@@ -258,24 +284,27 @@ class _AskFormState extends State<AskForm> {
         Center(
           child: GestureDetector(
             onTap: () async {
-              if (ImageUrl != null) {
-                // print("description is $Description");
-                // print("Url is $Url");
+              if (ImageUrl == null) {
+                Fluttertoast.showToast(msg: "Please select photo");
+              } else if (Url.isEmpty) {
+                setState(() {
+                  isUrlError = true;
+                  validationMessage = "Please enter website URL.";
+                });
+              } else if (!RegExp(
+                      "^www\.(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]")
+                  .hasMatch(Url)) {
+                setState(() {
+                  isUrlError = true;
+                  validationMessage = "Please Enter Valid URL, Start with WWW";
+                });
+              } else {
+                isUrlError = false;
                 Overlay.of(context)!.insert(loader!);
                 setState(() {
                   sendData(ImageUrl!, Url, Description!);
                 });
-                // print(AskFormModalClass(
-                //         UserId: UserId,
-                //         Url: ImageUrl,
-                //         Description: Description,
-                //         ImageTitle: ImageUrl)
-                //     .toJson());
                 Loader.hideLoader(loader!);
-              } else {
-                // print("description is $Description");
-                // print("Url is $Url");
-                Fluttertoast.showToast(msg: "Please select photo");
               }
             },
             child: ColorButton(
