@@ -367,6 +367,7 @@ class _OTPState extends State<OTP> {
                               isOtpError = false;
                               Overlay.of(context)!.insert(loader!);
                               register(RegisterOTPModalClass(
+                                      name: widget.Name,
                                       phone: widget.Mobile,
                                       Otp: controller.text)
                                   .toJson());

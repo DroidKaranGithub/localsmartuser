@@ -12,6 +12,7 @@ class ApiRepository {
   Future<http.Response> RegisterOTPVerification(Object modal) async {
     String Url = BaseUrl + "verification";
     print("REQUEST---> $Url");
+    print("REQUEST_DATA RegisterOTPVerification---> $modal");
     var body = await http.post(Uri.parse(Url), body: modal);
     print("Response--> $body");
     return body;
@@ -19,6 +20,16 @@ class ApiRepository {
 
   Future<http.Response> LoginOTPVerification(Object modal) async {
     String Url = BaseUrl + "verification";
+    print("REQUEST---> $Url");
+    print("REQUEST_DATA LoginOTPVerification---> $modal");
+    var body = await http.post(Uri.parse(Url), body: modal);
+    return body;
+  }
+
+  Future<http.Response> OTPVerification(Object modal) async {
+    String Url = BaseUrl + "verification";
+    print("REQUEST---> $Url");
+    print("REQUEST_DATA LoginOTPVerification---> $modal");
     var body = await http.post(Uri.parse(Url), body: modal);
     return body;
   }
@@ -32,6 +43,7 @@ class ApiRepository {
   Future<http.Response> Login(Object modal) async {
     String Url = BaseUrl + "user/login";
     print("API_REQUEST-->$Url");
+    print("API_REQUEST Login-->$modal");
     var body = await http.post(Uri.parse(Url), body: modal);
     print("API_REQUEST-->$body");
     return body;

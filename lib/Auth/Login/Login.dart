@@ -28,6 +28,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   bool isPhoneError = false;
   bool isOtpError = false;
+  bool isGetOtpCLicked = false;
   String validationMessage = "";
   DateTime? currentBackPressTime;
   String? Mobile;
@@ -132,6 +133,45 @@ class _LoginState extends State<Login> {
     return exit(0);
   }
 
+  _verify(Object modal) {
+    print("inside login $modal");
+    ApiRepository().OTPVerification(modal).then((value) {
+      var msg = jsonDecode(value.body);
+      print(msg);
+      print(value.body.toString());
+      if (msg['status'] == true) {
+        var body = LoginOTPModalClass.fromJson(jsonDecode(value.body));
+        Overlay.of(context)!.insert(loader);
+        OtpVerification(
+            LoginOTPModalClass(phone: Mobile.toString(), otp: controller.text)
+                .toJson());
+        Loader.hideLoader(loader);
+        setState(() {
+          Status = body.Status;
+        });
+      } else {
+        // Fluttertoast.showToast(msg: msg['error']);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              msg['error'],
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+      }
+      // if (tatus == body.Status) {
+      //   Shared.pref.setBool("Login", true);
+      //   print(Shared.pref.setBool("Login", true));
+      //   Navigator.pushReplacement(context,
+      //       MaterialPageRoute(builder: (context) {
+      //     return Ask();
+      //   }));
+      // }
+    });
+  }
+
   Login(Object modal) {
     print("inside login $modal");
     ApiRepository().LoginOTPVerification(modal).then((value) {
@@ -227,6 +267,12 @@ class _LoginState extends State<Login> {
                           InputField(
                             onChanged: (val) {
                               Mobile = val;
+                              if (Status == true) {
+                                if (Mobile!.length < 10) {
+                                  Status = false;
+                                }
+                              }
+                              setState(() {});
                             },
                             validator: (value) {
                               if (value == null) {
@@ -298,6 +344,7 @@ class _LoginState extends State<Login> {
                             visible: (Status == true) ? false : true,
                             child: InkWell(
                               onTap: () {
+                                isGetOtpCLicked = true;
                                 FocusScope.of(context).unfocus();
                                 print("GET OTP CLICKED");
                                 setState(() {
@@ -352,7 +399,11 @@ class _LoginState extends State<Login> {
                                   } else {
                                     isOtpError = false;
                                     Overlay.of(context)!.insert(loader);
-                                    OtpVerification(LoginOTPModalClass(
+                                    // OtpVerification(LoginOTPModalClass(
+                                    //         phone: Mobile.toString(),
+                                    //         otp: controller.text)
+                                    //     .toJson());
+                                    _verify(LoginOTPModalClass(
                                             phone: Mobile.toString(),
                                             otp: controller.text)
                                         .toJson());
@@ -381,8 +432,60 @@ class _LoginState extends State<Login> {
                               ),
                             ),
                           ),
+
                           SizedBox(
-                            height: 30,
+                            height: 10,
+                          ),
+                          Visibility(
+                            visible: (Status == true) ? true : false,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextButton(
+                                    onPressed: () {
+                                      FocusScope.of(context).unfocus();
+                                      print("GET OTP CLICKED");
+                                      setState(() {
+                                        if (Mobile == null) {
+                                          isPhoneError = true;
+                                          validationMessage =
+                                              "Enter Mobile Number";
+                                        } else if (Mobile!.isEmpty) {
+                                          isPhoneError = true;
+                                          validationMessage =
+                                              "Enter Mobile Number";
+                                        } else if (!phoneRegex
+                                            .hasMatch(Mobile!)) {
+                                          isPhoneError = true;
+                                          validationMessage =
+                                              'Please Enter valid phone number';
+                                        } else {
+                                          isPhoneError = false;
+                                          Overlay.of(context)!.insert(loader);
+                                          Login(LoginModalClassLoginTime(
+                                                  Mobile: Mobile.toString())
+                                              .toJson());
+
+                                          Loader.hideLoader(loader);
+                                        }
+                                      });
+                                    },
+                                    child: Text(
+                                      "Resend",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline1!
+                                          .copyWith(
+                                              color: orange,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                    ))
+                              ],
+                            ),
+                          ),
+
+                          SizedBox(
+                            height: 20,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -393,7 +496,8 @@ class _LoginState extends State<Login> {
                                     .textTheme
                                     .headline1!
                                     .copyWith(
-                                        color: DarkBlue,
+                                        color:
+                                            Status == true ? orange : DarkBlue,
                                         fontSize: 18,
                                         fontWeight: FontWeight.normal),
                               ),
@@ -411,7 +515,9 @@ class _LoginState extends State<Login> {
                                         .textTheme
                                         .headline1!
                                         .copyWith(
-                                            color: orange,
+                                            color: Status == true
+                                                ? DarkBlue
+                                                : orange,
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold),
                                   ))

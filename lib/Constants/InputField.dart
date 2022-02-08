@@ -80,6 +80,7 @@ class InputField extends StatelessWidget {
               filled: true,
               // prefix: ,
               errorText: error,
+              errorMaxLines: 2,
               errorStyle: TextStyle(color: Colors.red),
               prefixIcon: prefix,
               enabled: true,

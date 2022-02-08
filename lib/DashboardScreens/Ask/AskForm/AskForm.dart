@@ -199,17 +199,50 @@ class _AskFormState extends State<AskForm> {
                           color: orange),
                       hint: 'Image Upload',
                     )
-                  : Container(
-                      margin: EdgeInsets.only(left: 8.0),
-                      width: MediaQuery.of(context).size.width * 0.66,
-                      height: 55.0,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(30.0),
-                        child: Image.file(
-                          imagePath!,
-                          fit: BoxFit.cover,
+                  : Stack(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(5.0),
+                          margin: EdgeInsets.only(left: 5.0),
+                          width: MediaQuery.of(context).size.width * 0.68,
+                          height: 70.0,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(30.0),
+                            child: Image.file(
+                              imagePath!,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
-                      ),
+                        Positioned(
+                          right: 0.0,
+                          top: 0.0,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                imagePath = null;
+                                imagePath = null;
+                              });
+                            },
+                            child: Container(
+                              height: 35.0,
+                              width: 35.0,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(40.0),
+                                color: Colors.grey[100],
+                              ),
+                              child: ClipRRect(
+                                child: Center(
+                                  child: Icon(
+                                    Icons.close,
+                                    color: orange,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
             ],
           ),
@@ -245,7 +278,7 @@ class _AskFormState extends State<AskForm> {
           ],
         ),
         SizedBox(
-          height: 20,
+          height: 5,
         ),
         Row(
           children: [
